@@ -1,4 +1,4 @@
-package example.luojing.tingting;
+package com.example.luo.atest.com.example.luo.fragment;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project
@@ -1039,7 +1039,6 @@ public class ViewPager extends ViewGroup {
      * 只有依附了observer才会被调用
      */
     void dataSetChanged() {
-        // This method only gets called if our observer is attached, so mAdapter is non-null.
         final int adapterCount = mAdapter.getCount();
         mExpectedAdapterCount = adapterCount;
         boolean needPopulate = mItems.size() < mOffscreenPageLimit * 2 + 1
@@ -2077,7 +2076,6 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     *
      * @param x
      * @return
      */
@@ -2560,7 +2558,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     *  如果设置了MarginDrawable则会调用此方法
+     * 如果设置了MarginDrawable则会调用此方法
      */
     @Override
     protected void onDraw(Canvas canvas) {
@@ -2605,22 +2603,8 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Start a fake drag of the pager.
-     * <p>
-     * <p>A fake drag can be useful if you want to synchronize the motion of the ViewPager
-     * with the touch scrolling of another view, while still letting the ViewPager
-     * control the snapping motion and fling behavior. (e.g. parallax-scrolling tabs.)
-     * Call {@link #fakeDragBy(float)} to simulate the actual drag motion. Call
-     * {@link #endFakeDrag()} to complete the fake drag and fling as necessary.
-     * <p>
-     * <p>During a fake drag the ViewPager will ignore all touch events. If a real drag
-     * is already in progress, this method will return false.
-     *
-     * @return true if the fake drag began successfully, false if it could not be started.
-     * @see #fakeDragBy(float)
-     * @see #endFakeDrag()
+     * 开始一个虚拟拖动事件，用来模拟ViewPager的滑动
      */
-    //TODO 解析到此处
     public boolean beginFakeDrag() {
         if (mIsBeingDragged) {
             return false;
@@ -2642,10 +2626,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * End a fake drag of the pager.
-     *
-     * @see #beginFakeDrag()
-     * @see #fakeDragBy(float)
+     * 结束虚拟拖动事件
      */
     public void endFakeDrag() {
         if (!mFakeDragging) {
@@ -2674,11 +2655,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Fake drag by an offset in pixels. You must have called {@link #beginFakeDrag()} first.
-     *
-     * @param xOffset Offset in pixels to drag by.
-     * @see #beginFakeDrag()
-     * @see #endFakeDrag()
+     * 设置虚拟拖动的x的偏移值，必须先调用beginFakeDrag()
      */
     public void fakeDragBy(float xOffset) {
         if (!mFakeDragging) {
@@ -2726,17 +2703,15 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Returns true if a fake drag is in progress.
-     *
-     * @return true if currently in a fake drag, false otherwise.
-     * @see #beginFakeDrag()
-     * @see #fakeDragBy(float)
-     * @see #endFakeDrag()
+     * 判断是否正在进行虚拟拖动
      */
     public boolean isFakeDragging() {
         return mFakeDragging;
     }
 
+    /**
+     * 多点触控中当第二个pointer抬起的时候
+     */
     private void onSecondaryPointerUp(MotionEvent ev) {
         final int pointerIndex = MotionEventCompat.getActionIndex(ev);
         final int pointerId = ev.getPointerId(pointerIndex);
@@ -2752,6 +2727,9 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    /**
+     * 结束拖动
+     */
     private void endDrag() {
         mIsBeingDragged = false;
         mIsUnableToDrag = false;
@@ -2762,6 +2740,9 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    /**
+     * 设置是否启用绘制缓存
+     */
     private void setScrollingCacheEnabled(boolean enabled) {
         if (mScrollingCacheEnabled != enabled) {
             mScrollingCacheEnabled = enabled;
@@ -2778,11 +2759,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Check if this ViewPager can be scrolled horizontally in a certain direction.
-     *
-     * @param direction Negative to check scrolling left, positive to check scrolling right.
-     * @return Whether this ViewPager can be scrolled in the specified direction. It will always
-     * return false if the specified direction is 0.
+     * 检查这个ViewPager在指定方向是否可以横向滑动
      */
     public boolean canScrollHorizontally(int direction) {
         if (mAdapter == null) {
@@ -2801,15 +2778,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Tests scrollability within child views of v given a delta of dx.
-     *
-     * @param v      View to test for horizontal scrollability
-     * @param checkV Whether the view v passed should itself be checked for scrollability (true),
-     *               or just its children (false).
-     * @param dx     Delta scrolled in pixels
-     * @param x      X coordinate of the active touch point
-     * @param y      Y coordinate of the active touch point
-     * @return true if child views of v can be scrolled by delta of dx.
+     * 检查该View或其子View是否可横向滑动
      */
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
         if (v instanceof ViewGroup) {
@@ -2834,6 +2803,9 @@ public class ViewPager extends ViewGroup {
         return checkV && ViewCompat.canScrollHorizontally(v, -dx);
     }
 
+    /**
+     * 分发按键（硬件）点击事件
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         // Let the focused view and/or our descendants get the key first
@@ -2841,12 +2813,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * You can call this function yourself to have the scroll view perform
-     * scrolling from a key event, just as if the event had been dispatched to
-     * it by the view hierarchy.
-     *
-     * @param event The key event to execute.
-     * @return Return true if the event was handled, else false.
+     * 响应并执行按钮（硬件）点击事件
      */
     public boolean executeKeyEvent(KeyEvent event) {
         boolean handled = false;
@@ -2875,11 +2842,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Handle scrolling in response to a left or right arrow click.
-     *
-     * @param direction The direction corresponding to the arrow key that was pressed. It should be
-     *                  either {@link View#FOCUS_LEFT} or {@link View#FOCUS_RIGHT}.
-     * @return Whether the scrolling was handled successfully.
+     * 处理箭头键按下的滑动事件
      */
     public boolean arrowScroll(int direction) {
         View currentFocused = findFocus();
@@ -2947,6 +2910,9 @@ public class ViewPager extends ViewGroup {
         return handled;
     }
 
+    /**
+     * 以ViewPager的坐标为基准获取子View在其中的坐标系
+     */
     private Rect getChildRectInPagerCoordinates(Rect outRect, View child) {
         if (outRect == null) {
             outRect = new Rect();
@@ -2973,6 +2939,9 @@ public class ViewPager extends ViewGroup {
         return outRect;
     }
 
+    /**
+     * 切换到当前页面左边一页
+     */
     boolean pageLeft() {
         if (mCurItem > 0) {
             setCurrentItem(mCurItem - 1, true);
@@ -2981,6 +2950,9 @@ public class ViewPager extends ViewGroup {
         return false;
     }
 
+    /**
+     * 切换到当前页面右边一页
+     */
     boolean pageRight() {
         if (mAdapter != null && mCurItem < (mAdapter.getCount() - 1)) {
             setCurrentItem(mCurItem + 1, true);
@@ -2990,7 +2962,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * We only want the current page that is being shown to be focusable.
+     * 给当前页面（page）中的View设置可获取焦点
      */
     @Override
     public void addFocusables(ArrayList<View> views, int direction, int focusableMode) {
@@ -3032,7 +3004,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * We only want the current page that is being shown to be touchable.
+     * 给当前页面（page）中的View设置可接受触摸事件
      */
     @Override
     public void addTouchables(ArrayList<View> views) {
@@ -3051,7 +3023,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * We only want the current page that is being shown to be focusable.
+     * 子类请求获取焦点
      */
     @Override
     protected boolean onRequestFocusInDescendants(int direction,
@@ -3083,6 +3055,9 @@ public class ViewPager extends ViewGroup {
         return false;
     }
 
+    /**
+     * 分发所有可访问（获取）的事件
+     */
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         // Dispatch scroll events from this ViewPager.
@@ -3106,26 +3081,46 @@ public class ViewPager extends ViewGroup {
         return false;
     }
 
+    /**
+     * 生成默认的LayoutParams
+     */
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         return new LayoutParams();
     }
 
+    /**
+     * 生成默认的LayoutParams
+     */
     @Override
     protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
         return generateDefaultLayoutParams();
     }
 
+    /**
+     * 检查LayoutParams的类型
+     */
     @Override
     protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams && super.checkLayoutParams(p);
     }
 
+    /**
+     * 返回一个带属性的LayoutParams
+     */
     @Override
     public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new LayoutParams(getContext(), attrs);
     }
 
+    /**
+     * 代表一个委托，提高对可访问性的支持。
+     * 以下来自API解释：
+     * This class represents a delegate that can be registered in a View to enhance accessibility
+     * support via composition rather via inheritance. It is specifically targeted to widget
+     * developers that extend basic View classes i.e. classes in package android.view, that would
+     * like their applications to be backwards compatible.
+     */
     class MyAccessibilityDelegate extends AccessibilityDelegateCompat {
 
         @Override
@@ -3185,6 +3180,9 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    /**
+     * PagerObserver  adapter数据发生改变时回调。私有类由ViewPager自行处理
+     */
     private class PagerObserver extends DataSetObserver {
         @Override
         public void onChanged() {
@@ -3198,8 +3196,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Layout parameters that should be supplied for views added to a
-     * ViewPager.
+     * 自定义ViewPager布局参数
      */
     public static class LayoutParams extends ViewGroup.LayoutParams {
         /**
@@ -3211,7 +3208,7 @@ public class ViewPager extends ViewGroup {
         /**
          * Gravity setting for use on decor views only:
          * Where to position the view page within the overall ViewPager
-         * container; constants are defined in {@link android.view.Gravity}.
+         * container; constants are defined in {@link Gravity}.
          */
         public int gravity;
 
@@ -3249,6 +3246,9 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    /**
+     * 比较器，用于给View排序（如同一页面中绘制时的优先级）
+     */
     static class ViewPositionComparator implements Comparator<View> {
         @Override
         public int compare(View lhs, View rhs) {
