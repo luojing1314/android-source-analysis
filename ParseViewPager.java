@@ -341,7 +341,7 @@ public class ViewPager extends ViewGroup {
     private int mScrollState = SCROLL_STATE_IDLE;
 
     /**
-     * 当页面发生变化时调用
+     * 当页面发生变化时的回调接口
      */
     public interface OnPageChangeListener {
 
@@ -410,7 +410,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * Adapter发生改变时的回调接口
+     * Adapter发生改变时的监听接口
      */
     public interface OnAdapterChangeListener {
         /**
@@ -566,7 +566,6 @@ public class ViewPager extends ViewGroup {
 
     public void setAdapter(PagerAdapter adapter) {
         if (mAdapter != null) {
-            // TODO 非公共方法
             mAdapter.setViewPagerObserver(null);
             //更新adapter，底层调用方法已废弃
             mAdapter.startUpdate(this);
@@ -923,7 +922,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 核实drawable
+     * 检查drawable是否成功显示
      */
     @Override
     protected boolean verifyDrawable(Drawable who) {
@@ -952,14 +951,14 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 平滑移动
+     * 平滑移动道指定位置
      */
     void smoothScrollTo(int x, int y) {
         smoothScrollTo(x, y, 0);
     }
 
     /**
-     * 平滑移动
+     * 平滑移动道指定位置
      */
     void smoothScrollTo(int x, int y, int velocity) {
         if (getChildCount() == 0) {
