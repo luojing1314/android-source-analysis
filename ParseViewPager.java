@@ -1,4 +1,4 @@
-package com.example.luo.atest.com.example.luo.fragment;
+package example.luojing.androidsourceanalysis;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project
@@ -157,11 +157,11 @@ import java.util.List;
  * <p>For more information about how to use ViewPager, read <a
  * href="{@docRoot}training/implementing-navigation/lateral.html">Creating Swipe Views with
  * Tabs</a>.</p>
- * <p>
+ * <p/>
  * <p>Below is a more complicated example of ViewPager, using it in conjunction
  * with {@link android.app.ActionBar} tabs.  You can find other examples of using
  * ViewPager in the API 4+ Support Demos and API 13+ Support Demos sample code.
- * <p>
+ * <p/>
  * {@sample frameworks/support/samples/Support13Demos/src/com/example/android/supportv13/app
  * /ActionBarTabsPager.java
  * complete}
@@ -201,6 +201,9 @@ public class ViewPager extends ViewGroup {
         float offset;
     }
 
+    /**
+     * 自定义比较方式
+     */
     private static final Comparator<ItemInfo> COMPARATOR = new Comparator<ItemInfo>() {
         @Override
         public int compare(ItemInfo lhs, ItemInfo rhs) {
@@ -208,6 +211,9 @@ public class ViewPager extends ViewGroup {
         }
     };
 
+    /**
+     * 插值器，用于改变滑动效果
+     */
     private static final Interpolator sInterpolator = new Interpolator() {
         @Override
         public float getInterpolation(float t) {
@@ -330,6 +336,9 @@ public class ViewPager extends ViewGroup {
      */
     public static final int SCROLL_STATE_SETTLING = 2;
 
+    /**
+     * 滑动完成填充数据
+     */
     private final Runnable mEndScrollRunnable = new Runnable() {
         @Override
         public void run() {
@@ -532,7 +541,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 从window移除
+     * 从window中移除时
      */
     @Override
     protected void onDetachedFromWindow() {
@@ -544,7 +553,7 @@ public class ViewPager extends ViewGroup {
         super.onDetachedFromWindow();
     }
 
-    //设置ScrollState状态码
+    //设置ScrollState状态
     private void setScrollState(int newState) {
         if (mScrollState == newState) {
             return;
@@ -560,14 +569,10 @@ public class ViewPager extends ViewGroup {
 
     /**
      * 设置ViewPager的adapter
-     *
-     * @param adapter Adapter to use
      */
-
     public void setAdapter(PagerAdapter adapter) {
         if (mAdapter != null) {
             mAdapter.setViewPagerObserver(null);
-            //更新adapter，底层调用方法已废弃
             mAdapter.startUpdate(this);
             for (int i = 0; i < mItems.size(); i++) {
                 final ItemInfo ii = mItems.get(i);
@@ -615,7 +620,8 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 待深入
+     * 移除所有非Decor类型的view（即移除所有当前adapter中提供的View）
+     * 此方法会在我们重新给ViewPager设置适配器时调用
      */
     private void removeNonDecorViews() {
         for (int i = 0; i < getChildCount(); i++) {
@@ -930,7 +936,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * drawable状态发生改变时调用
+     * drawable状态发生改变时调用,这里主要是指我们设置的PageMarginDrawable
      */
     @Override
     protected void drawableStateChanged() {
@@ -1436,7 +1442,7 @@ public class ViewPager extends ViewGroup {
                     + " position=" + position + "}";
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
+        public static final Creator<SavedState> CREATOR = ParcelableCompat.newCreator(
                 new ParcelableCompatCreatorCallbacks<SavedState>() {
                     @Override
                     public SavedState createFromParcel(Parcel in, ClassLoader loader) {
@@ -2075,10 +2081,8 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * @param x
-     * @return
+     * 是否从屏幕边缘滑动
      */
-    //TODO 未知
     private boolean isGutterDrag(float x, float dx) {
         return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
     }
@@ -2787,7 +2791,6 @@ public class ViewPager extends ViewGroup {
             final int count = group.getChildCount();
             // Count backwards - let topmost views consume scroll distance first.
             for (int i = count - 1; i >= 0; i--) {
-                // TODO: Add versioned support here for transformed views.
                 // This will not work for transformed views in Honeycomb+
                 final View child = group.getChildAt(i);
                 if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight()
