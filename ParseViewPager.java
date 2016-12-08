@@ -642,9 +642,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 把监听器添加到集合中，当事件发生改变时遍历集合中的监听器
-     *
-     * @param listener listener to add
+     * 添加adapter变化监听
      */
     public void addOnAdapterChangeListener(@NonNull OnAdapterChangeListener listener) {
         if (mAdapterChangeListeners == null) {
@@ -654,9 +652,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 从集合中移除监听
-     *
-     * @param listener listener to remove
+     * 移除adapter变化监听
      */
     public void removeOnAdapterChangeListener(@NonNull OnAdapterChangeListener listener) {
         if (mAdapterChangeListeners != null) {
@@ -695,7 +691,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * ViewPager页面切换，setCurrentItem的实际执行方法
+     * ViewPager内部页面切换，setCurrentItem的实际执行方法
      */
     void setCurrentItemInternal(int item, boolean smoothScroll, boolean always) {
         setCurrentItemInternal(item, smoothScroll, always, 0);
@@ -808,7 +804,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 设置页面切换效果,可用该方法自定义页面切换效果，注意3.0以前的系统使用该方法无效
+     * 设置页面切换效果,可用该方法自定义页面切换效果，注意API>=11时使用该方法无效
      */
     public void setPageTransformer(boolean reverseDrawingOrder, PageTransformer transformer) {
         if (Build.VERSION.SDK_INT >= 11) {
@@ -826,7 +822,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * sdk版本>=7则反射调用ViewGroup.setChildrenDrawingOrderEnabled方法,是否按指定顺序绘制子View
+     * sdk版本>=7则反射调用ViewGroup.setChildrenDrawingOrderEnabled方法,是否启用按指定顺序绘制子View
      */
     void setChildrenDrawingOrderEnabledCompat(boolean enable) {
         if (Build.VERSION.SDK_INT >= 7) {
@@ -860,7 +856,7 @@ public class ViewPager extends ViewGroup {
 
 
     /**
-     * 设置监听器
+     * 给support library设置一个单独的页面监听器
      */
     OnPageChangeListener setInternalPageChangeListener(OnPageChangeListener listener) {
         OnPageChangeListener oldListener = mInternalPageChangeListener;
@@ -1041,7 +1037,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 只有依附了observer才会被调用
+     * 只有依附了observer才会被调用，即adapter不为空的情况
      */
     void dataSetChanged() {
         final int adapterCount = mAdapter.getCount();
@@ -1113,14 +1109,14 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * ViewPager填充内容的核心方法
+     * 给ViewPager页面填充内容的核心方法
      */
     void populate() {
         populate(mCurItem);
     }
 
     /**
-     * ViewPager填充内容的核心方法
+     * 给ViewPager页面填充内容的核心方法
      */
     void populate(int newCurrentItem) {
         ItemInfo oldCurInfo = null;
@@ -1417,7 +1413,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * ViewPager持久化保存状态
+     * ViewPager状态持久化保存内部类
      */
     public static class SavedState extends AbsSavedState {
         int position;
@@ -1554,7 +1550,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 返回指定View的item信息
+     * 返回指定View的ItemInfo信息
      */
     ItemInfo infoForChild(View child) {
         for (int i = 0; i < mItems.size(); i++) {
@@ -1882,7 +1878,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 页面滚动时调用
+     * 页面滚动调用
      */
     private boolean pageScrolled(int xpos) {
         if (mItems.size() == 0) {
@@ -1918,7 +1914,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 当页面滚动时调用
+     * OnPageChangeListener中的回调方法之一，当页面滚动时调用
      */
     @CallSuper
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
@@ -2081,7 +2077,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 是否从屏幕边缘滑动
+     * 是否是从屏幕边缘滑动
      */
     private boolean isGutterDrag(float x, float dx) {
         return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
@@ -2376,7 +2372,7 @@ public class ViewPager extends ViewGroup {
     }
 
     /**
-     * 重置touch事件？（根据返回值确定是否需要继续执行动画进行界面重绘）
+     * 重置touch事件（根据返回值确定是否需要继续执行动画并进行界面重绘）
      */
     private boolean resetTouch() {
         boolean needsInvalidate;
@@ -2516,7 +2512,7 @@ public class ViewPager extends ViewGroup {
 
 
     /**
-     * 绘制边界
+     * 绘制滑动到底时的效果，即第一页向左滑动和最后一页向右滑动
      */
     @Override
     public void draw(Canvas canvas) {
